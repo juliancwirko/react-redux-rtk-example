@@ -3,11 +3,11 @@ import { Input, Button } from '@chakra-ui/react';
 
 interface SearchInputProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  isLoading: boolean;
+  isFetching: boolean;
 }
 
 const SearchInput: React.FC<SearchInputProps> = memo(
-  ({ setSearch, isLoading }) => {
+  ({ setSearch, isFetching }) => {
     const handleSubmit = (
       e: React.BaseSyntheticEvent<Event, EventTarget & HTMLFormElement>
     ) => {
@@ -26,7 +26,7 @@ const SearchInput: React.FC<SearchInputProps> = memo(
         <Button
           type='submit'
           colorScheme='blue'
-          isLoading={isLoading}
+          isLoading={isFetching}
           loadingText='Loading'
           w='100%'
           mt='20px'

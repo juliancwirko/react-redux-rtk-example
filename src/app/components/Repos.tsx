@@ -3,6 +3,7 @@ import { useGetReposByUsernameQuery } from '../services/githubApi';
 import { Spinner, Box } from '@chakra-ui/react';
 import RepoBox from './RepoBox';
 import RepoPageSwitcher from './RepoPageSwitcher';
+import ErrorBox from './ErrorBox';
 
 interface ReposProps {
   selectedUser: string;
@@ -13,7 +14,11 @@ const equalityFn = (prevProps: ReposProps, nextProps: ReposProps) =>
 
 const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
   const [page, setPage] = useState(1);
-  const { data: repos, isLoading } = useGetReposByUsernameQuery(
+  const {
+    data: repos,
+    isFetching,
+    error,
+  } = useGetReposByUsernameQuery(
     { username: selectedUser, page },
     {
       skip: !selectedUser,
@@ -21,7 +26,14 @@ const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
   );
 
   const noData = () => {
-    if (!isLoading) {
+    if (error) {
+      return (
+        <Box color='red.500' marginTop='5px' marginBottom='5px'>
+          <ErrorBox error={error} />
+        </Box>
+      );
+    }
+    if (!isFetching) {
       return (
         <Box
           marginTop='5px'
@@ -40,18 +52,22 @@ const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
     return '';
   };
 
-  const isResult = () => Array.isArray(repos) && repos.length > 0;
+  const isResult = () => !error && Array.isArray(repos) && repos.length > 0;
 
   return (
-    <div>
+    <Box position='relative'>
       <RepoPageSwitcher page={page} setPage={setPage} isResult={isResult()} />
-      {isLoading && (
+      {isFetching && (
         <Box
           w='100%'
           display='flex'
           justifyContent='center'
           alignItems='center'
-          minH='240px'
+          position='absolute'
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
         >
           <Spinner />
         </Box>
@@ -66,7 +82,7 @@ const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
             />
           ))
         : noData()}
-    </div>
+    </Box>
   );
 }, equalityFn);
 
