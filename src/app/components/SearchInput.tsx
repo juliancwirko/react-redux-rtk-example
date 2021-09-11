@@ -1,5 +1,5 @@
-import React, { memo } from 'react';
-import { Input, Button } from '@chakra-ui/react';
+import React, { memo, useState } from 'react';
+import { Input, Button, Box } from '@chakra-ui/react';
 
 interface SearchInputProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -8,28 +8,40 @@ interface SearchInputProps {
 
 const SearchInput: React.FC<SearchInputProps> = memo(
   ({ setSearch, isFetching }) => {
+    const [inputValue, setInputValue] = useState('');
+
     const handleSubmit = (
       e: React.BaseSyntheticEvent<Event, EventTarget & HTMLFormElement>
     ) => {
       e.preventDefault();
-      const searchQuery = e?.target?.['search-input']?.value;
-      if (searchQuery?.length > 2) {
-        setSearch(searchQuery.trim());
+      if (inputValue?.length > 2) {
+        setSearch(inputValue.trim());
       } else {
         setSearch('');
       }
     };
 
+    const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+      setInputValue(e.currentTarget.value);
+    };
+
     return (
       <form onSubmit={handleSubmit}>
-        <Input placeholder='Enter GitHub username' name='search-input' />
+        <Input
+          placeholder='Enter GitHub username'
+          name='search-input'
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <Box height='30px' fontSize='14px'>
+          {inputValue && <>Showing user for: "{inputValue}"</>}
+        </Box>
         <Button
           type='submit'
           colorScheme='blue'
           isLoading={isFetching}
           loadingText='Loading'
           w='100%'
-          mt='20px'
           mb='20px'
         >
           Search
