@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
@@ -6,7 +6,7 @@ interface ErrorBoxProps {
   error?: FetchBaseQueryError | SerializedError | undefined;
 }
 
-const Loading: React.FC<ErrorBoxProps> = memo(({ error }) => {
+const ErrorBox: React.FC<ErrorBoxProps> = ({ error }) => {
   const getError = () => {
     if (error) {
       const errorData = (error as FetchBaseQueryError).data as {
@@ -20,6 +20,6 @@ const Loading: React.FC<ErrorBoxProps> = memo(({ error }) => {
   const errorMsg = getError();
 
   return <>{errorMsg ? <div>{errorMsg}</div> : null}</>;
-});
+};
 
-export default Loading;
+export default ErrorBox;

@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { useGetReposByUsernameQuery } from '../services/githubApi';
 import { Spinner, Box } from '@chakra-ui/react';
 import RepoBox from './RepoBox';
@@ -9,10 +9,7 @@ interface ReposProps {
   selectedUser: string;
 }
 
-const equalityFn = (prevProps: ReposProps, nextProps: ReposProps) =>
-  prevProps.selectedUser === nextProps.selectedUser;
-
-const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
+const Repos: React.FC<ReposProps> = ({ selectedUser }) => {
   const [page, setPage] = useState(1);
   const {
     data: repos,
@@ -52,11 +49,11 @@ const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
     return '';
   };
 
-  const isResult = () => !error && Array.isArray(repos) && repos.length > 0;
+  const isResult = !error && Array.isArray(repos) && repos.length > 0;
 
   return (
     <Box position='relative'>
-      <RepoPageSwitcher page={page} setPage={setPage} isResult={isResult()} />
+      <RepoPageSwitcher page={page} setPage={setPage} isResult={isResult} />
       {isFetching && (
         <Box
           w='100%'
@@ -72,7 +69,7 @@ const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
           <Spinner />
         </Box>
       )}
-      {isResult()
+      {isResult
         ? repos?.map((repo) => (
             <RepoBox
               key={repo.id}
@@ -84,6 +81,6 @@ const Repos: React.FC<ReposProps> = memo(({ selectedUser }) => {
         : noData()}
     </Box>
   );
-}, equalityFn);
+};
 
 export default Repos;

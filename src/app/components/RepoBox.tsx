@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
@@ -8,7 +8,7 @@ interface RepoBoxProps {
   description: string;
 }
 
-const RepoBox: React.FC<RepoBoxProps> = memo(({ name, description, stars }) => {
+const RepoBox: React.FC<RepoBoxProps> = ({ name, description, stars }) => {
   return (
     <Box
       marginTop='5px'
@@ -29,6 +29,6 @@ const RepoBox: React.FC<RepoBoxProps> = memo(({ name, description, stars }) => {
       </Box>
     </Box>
   );
-});
+};
 
 export default RepoBox;
