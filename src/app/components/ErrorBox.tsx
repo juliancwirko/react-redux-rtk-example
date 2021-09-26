@@ -12,7 +12,7 @@ const ErrorBox: React.FC<ErrorBoxProps> = ({ error }) => {
       const errorData = (error as FetchBaseQueryError).data as {
         message: string;
       };
-      return errorData.message;
+      return errorData?.message;
     }
     return null;
   };
